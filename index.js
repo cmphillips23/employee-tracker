@@ -15,6 +15,29 @@ const promptUserStart = () => {
             choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role', 'Delete a department', 'Delete a role', 'Delete an employee']
         }
     ])
+    .then(choice => {
+        if (choice === 'View all departments') {
+            console.log(departmentArr);
+        } else if (choice === 'View all roles') {
+            console.log(roleArr);
+        } else if (choice === 'View all employees') {
+            console.log(employeeArr);
+        } else if (choice === 'Add a department') {
+            promptAddDepartment();
+        } else if (choice === 'Add a role') {
+            promptAddRole();
+        } else if (choice === 'Add an employee') {
+            promptAddEmployee();
+        } else if (choice === 'Update an employee role') {
+            promptUpdateRole();
+        } else if (choice === 'Delete a department') {
+            promptDeleteDepartment();
+        } else if (choice === 'Delete a role') {
+            promptDeleteRole();
+        } else if (choice === 'Delete an employee') {
+            promptDeleteEmployee();
+        }
+    });
 };
 
 // Prompt for adding a department
@@ -169,3 +192,5 @@ const promptDeleteEmployee = () => {
         }
     ])
 }
+
+promptUserStart();
