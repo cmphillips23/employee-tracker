@@ -5,7 +5,7 @@ USE employee_DB;
 
 CREATE TABLE departments (
     id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-    name VARCHAR(30) NOT NULL,
+    department VARCHAR(30) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -24,5 +24,6 @@ CREATE TABLE employees (
     last_name VARCHAR(30) NOT NULL,
     role_id INTEGER UNSIGNED NOT NULL,
     manager_id INTEGER UNSIGNED,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
 );

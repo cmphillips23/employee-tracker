@@ -1,8 +1,7 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
-const cTable = require('console.table');
 
-const { viewDepartments, viewRoles, viewEmployees, addDepartment, addRole, addEmployee } = require('./db/database');
+const { viewDepartments, viewRoles, viewEmployees, addDepartment, addRole, addEmployee, deleteDepartment, deleteRole, deleteEmployee } = require('./db/database');
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -19,7 +18,7 @@ const promptUserStart = () => {
             type: 'list',
             name: 'start',
             message: 'What would you like to do?',
-            choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role', 'Delete a department', 'Delete a role', 'Delete an employee']
+            choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Delete a department', 'Delete a role', 'Delete an employee']
         }
     ])
     .then(selection => {
@@ -35,15 +34,13 @@ const promptUserStart = () => {
             promptAddRole();
         } else if (selection.start === 'Add an employee') {
             promptAddEmployee();
-        } else if (selection.start === 'Update an employee role') {
-            promptUpdateRole();
         } else if (selection.start === 'Delete a department') {
             promptDeleteDepartment();
         } else if (selection.start === 'Delete a role') {
             promptDeleteRole();
         } else if (selection.start === 'Delete an employee') {
             promptDeleteEmployee();
-        }
+        };
     });
 }
 
@@ -86,28 +83,12 @@ const promptAddRole = () => {
         {
             type: 'number',
             name: 'addRoleSalary',
-            message: 'Please enter the salary of the role you would like to add',
-            validate: roleInput => {
-                if (roleInput) {
-                    return true;
-                } else {
-                    console.log('Please enter the salary of the role you would like to add');
-                    return false;
-                }
-            }
+            message: 'Please enter the salary of the role you would like to add'
         },
         {
-            type: 'input',
+            type: 'number',
             name: 'addRoleDepartment',
-            message: 'Please enter the name of the department to which you want this role to belong',
-            validate: roleInput => {
-                if (roleInput) {
-                    return true;
-                } else {
-                    console.log('Please enter the department of the role you would like to add');
-                    return false;
-                }
-            }
+            message: 'Please enter the id of the department to which you want this role to belong'
         }
     ])
     .then(response => addRole(response))
@@ -143,78 +124,45 @@ const promptAddEmployee = () => {
             }
         },
         {
-            type: 'input',
+            type: 'number',
             name: 'addEmployeeRole',
-            message: "Please enter the new employee's role",
-            validate: roleInput => {
-                if (roleInput) {
-                    return true;
-                } else {
-                    console.log('Please enter the role of the employee you would like to add');
-                    return false;
-                }
-            }
+            message: "Please enter the new employee's role id"
         }
     ])
     .then(response => addEmployee(response))
 }
 
-//Prompt for updating an employee role
-const promptUpdateRole = () => {
-    return inquirer.prompt([
-        {
-            type: 'list',
-            name: 'updateRole',
-            message: 'Please select the employee whose role you would like to update',
-            choices: employeeArr.first_name
-        },
-        {
-            type: 'input',
-            name: 'addDepartment',
-            message: 'Please enter the name of the department you would like to add',
-            validate: departmentInput => {
-                if (departmentInput) {
-                    return true;
-                } else {
-                    console.log('Please enter the name of the department you would like to add');
-                    return false;
-                }
-            }
-        }
-    ])
-}
-
 const promptDeleteDepartment = () => {
     return inquirer.prompt([
         {
-            type: 'list',
+            type: 'number',
             name: 'deleteDepartment',
-            message: 'Please select the department you would like to delete',
-            choices: departmentArr
+            message: 'Please enter the id of the department you would like to delete'
         }
     ])
+    .then(response => deleteDepartment(response))
 }
 
 const promptDeleteRole = () => {
     return inquirer.prompt([
         {
-            type: 'list',
+            type: 'number',
             name: 'deleteRole',
-            message: 'Please select the role you would like to delete',
-            choices: roleArr
+            message: 'Please enter the id of the role you would like to delete'
         }
     ])
+    .then(response => deleteRole(response))
 }
 
 const promptDeleteEmployee = () => {
     return inquirer.prompt([
         {
-            type: 'list',
+            type: 'number',
             name: 'deleteEmployee',
-            message: 'Please select the employee you would like to delete',
-            choices: employeeArr
+            message: 'Please enter the id of the employee you would like to delete'
         }
     ])
+    .then(response => deleteEmployee(response))
 }
 
 
