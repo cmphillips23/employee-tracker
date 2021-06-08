@@ -37,9 +37,14 @@ const viewEmployees = () => {
 const addDepartment = (response) => {
     con.promise().query('INSERT INTO departments SET ?',
                         {
-                            name: response.addDepartment
+                            department: response.addDepartment
                         })
                         .then(console.log('Department has been added to the database.'));
+    con.promise().query(`SELECT department
+                         FROM departments`)
+                        .then( ([rows,fields]) => {
+                           console.table(rows);
+                        });
 }
 
 const addRole = (response) => {
@@ -50,6 +55,11 @@ const addRole = (response) => {
                             department_id: response.addRoleDeparment
                         })
                         .then(console.log('Role has been added to the database.'));
+    con.promise().query(`SELECT title, salary
+                         FROM roles`)
+                        .then( ([rows,fields]) => {
+                           console.table(rows);
+                        });
 }
 
 const addEmployee = (response) => {
@@ -60,21 +70,47 @@ const addEmployee = (response) => {
                             role_id: response.addEmployeeRole
                         })
                         .then(console.log('Employee has been added to the database.'));
+    con.promise().query(`SELECT first_name, last_name, title, salary, department
+                         FROM employees
+                         LEFT JOIN roles ON employees.role_id = roles.id
+                         LEFT JOIN departments ON roles.department_id = departments.id
+                         ORDER BY employees.id`)
+                        .then( ([rows,fields]) => {
+                           console.table(rows);
+                        });
 }
 
 const deleteDepartment = (response) => {
     con.promise().query(`DELETE FROM departments WHERE id = ${response.deleteDepartment}`)
                         .then(console.log('Department has been deleted.'));
+    con.promise().query(`SELECT department
+                         FROM departments`)
+                        .then( ([rows,fields]) => {
+                          console.table(rows);
+                        });
 }
 
 const deleteRole = (response) => {
     con.promise().query(`DELETE FROM roles WHERE id = ${response.deleteRole}`)
                         .then(console.log('Role has been deleted.'));
+    con.promise().query(`SELECT title, salary
+                         FROM roles`)
+                        .then( ([rows,fields]) => {
+                          console.table(rows);
+                        });
 }
 
 const deleteEmployee = (response) => {
     con.promise().query(`DELETE FROM employees WHERE id = ${response.deleteEmployee}`)
                         .then(console.log('Employee has been deleted.'));
+    con.promise().query(`SELECT first_name, last_name, title, salary, department
+                         FROM employees
+                         LEFT JOIN roles ON employees.role_id = roles.id
+                         LEFT JOIN departments ON roles.department_id = departments.id
+                         ORDER BY employees.id`)
+                        .then( ([rows,fields]) => {
+                           console.table(rows);
+                        });
 }
 
 con.connect(err => {
